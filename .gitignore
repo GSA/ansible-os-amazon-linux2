@@ -1,8 +1,2 @@
 **/*.retry
 **/*.swp
-**/*.vagrant
-*.output
-tests/tmp
-tests/roles
-.idea
-.DS_store

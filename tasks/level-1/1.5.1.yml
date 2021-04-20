@@ -39,7 +39,7 @@
   sysctl:
     ignoreerrors: yes
     name: fs.suid_dumpable
-    value: "0"
+    value: 0
     state: present
   tags:
     - level-1

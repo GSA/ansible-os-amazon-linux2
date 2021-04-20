@@ -1,14 +1,14 @@
-# Amazon Linux 2 optimized for EKS
+# Amazon Linux 2
 
 ## Introduction
-------------
+---------------
 
-This ansible content will configure an Amazon Linux 2 optimized for EKS to be GSA complaint.
+This ansible content will configure an Amazon Linux 2 to be GSA complaint.
 
 This code is based on the GSA [AWS Elastic Kubernetes Service Benchmark](https://docs.google.com/spreadsheets/d/1s9DLJIVlX4eMZXpUs-RLTeCZbdtapfy9rZKb9pvuzHs/edit#gid=1253713100).
 
 ### Pre-Hardened Amazon Machine Images
-ISE provides a maintained and hardened AWS EKS AMI. More information about usage can be found [here](https://cautious-happiness-f7ecfe89.pages.github.io/techdoc_hardenedami_introduction.html)
+ISE provides a maintained and hardened Amazon Linux v2.0 AMI. More information about usage can be found [here](https://cautious-happiness-f7ecfe89.pages.github.io/techdoc_hardenedami_introduction.html)
 
 ### Important Information
 

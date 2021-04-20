@@ -1,38 +1,37 @@
 # Standards: 0.11
 ---
 
-# 3.4.2 - Ensure SCTP is disabled
+# 3.4.2 Ensure /etc/hosts.allow is configured
 
-- name: 3.4.2 - Check if CIS modprobe configuration file exists
+- name: 3.4.2 - Check if /etc/hosts.allow configuration file exists
   stat:
-    path: "{{ cis_modprobe_conf_filename }}"
-  register: modprobe_3_5_2
+    path: "/etc/hosts.allow"
+  register: hosts_allow_3_4_2
   tags:
     - level-1
     - section-3
     - "3.4.2"
-    - not-scored
+    - scored
 
-- name: 3.4.2 - Ensure SCTP is disabled
+- name: 3.4.2 - Ensure /etc/hosts.allow is configured
   copy:
-    dest: "{{ cis_modprobe_conf_filename }}"
-    content: "install sctp /bin/true\n"
-  when: modprobe_3_5_2.stat.exists is not defined or not modprobe_3_5_2.stat.exists
+    path: "/etc/hosts.allow"
+    content: "ALL: {{ cis_hosts_allow_all_ips }}\n"
+  when: hosts_allow_3_4_2.stat.exists is not defined or not hosts_allow_3_4_2.stat.exists
   tags:
     - level-1
     - section-3
     - "3.4.2"
-    - not-scored
+    - scored
 
-- name: 3.4.2 - Ensure SCTP is disabled
+- name: 3.4.2 - Ensure /etc/hosts.allow is configured
   lineinfile:
-    dest: "{{ cis_modprobe_conf_filename }}"
-    regexp: "^install sctp\\s+"
-    line: "install sctp /bin/true"
-  when: modprobe_3_5_2.stat.exists is defined and modprobe_3_5_2.stat.exists
+    dest: "/etc/hosts.allow"
+    regexp: "^ALL:"
+    line: "ALL: {{ cis_hosts_allow_all_ips }}"
+  when: hosts_allow_3_4_2.stat.exists is defined and hosts_allow_3_4_2.stat.exists
   tags:
     - level-1
     - section-3
     - "3.4.2"
-    - not-scored
-
+    - scored

@@ -14,33 +14,6 @@
     - "4.2.1.1"
     - scored
 
-- name: 4.2.1.1 - Update /etc/rsyslog.conf
-  template:
-    src: etc/rsyslog.conf
-    dest: /etc/rsyslog.conf
-    owner: root
-    group: root
-    mode: '0640'
-    backup: yes
-  tags:
-    - level-1
-    - "4.2.1.1"    
-
-
-- name: Update selinux port rules for syslog
-  command: semanage port -a -t syslogd_port_t -p tcp 1556
-  ignore_errors: yes
-  tags:
-    - mcaas-added
-
-- name: Restart rsyslog service
-  service:
-    name: "rsyslog"
-    enabled: true
-    state: restarted
-  tags:
-    - mcaas-added
-
 - name: 4.2.1.1 - Ensure rsyslog Service is enabled
   service:
     name: "rsyslog"

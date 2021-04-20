@@ -22,16 +22,14 @@
   with_items:
     - '# 4.1.9 Ensure login and logout events are collected'
     - '-w /var/run/utmp -p wa -k session'
-    - '-w /var/log/wtmp -p wa -k logins'
-    - '-w /var/log/btmp -p wa -k logins'
+    - '-w /var/log/wtmp -p wa -k session'
+    - '-w /var/log/btmp -p wa -k session'
   when:
     ("'-w /var/run/utmp -p wa -k session' not in session.stdout") or
-    ("'-w /var/log/wtmp -p wa -k logins' not in session.stdout") or
-    ("'-w /var/log/btmp -p wa -k logins' not in session.stdout")
-  notify: Generate auditd rules
+    ("'-w /var/log/wtmp -p wa -k session' not in session.stdout") or
+    ("'-w /var/log/btmp -p wa -k session' not in session.stdout")
   tags:
     - "4.1.9"
     - level-2
     - section-4
     - scored
-

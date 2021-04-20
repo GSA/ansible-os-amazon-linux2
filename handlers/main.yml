@@ -15,9 +15,3 @@
   service:
     name: auditd
     state: restarted
-
-- name: Reconfigure GRUB
-  command: grub2-mkconfig -o /boot/grub2/grub.cfg
-
-- name: Generate auditd rules
-  command: /usr/sbin/augenrules

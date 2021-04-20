@@ -8,7 +8,7 @@
     path: /etc/gshadow-
     owner: root
     group: root
-    mode: 0000
+    mode: 0600
   tags:
     - level-1
     - section-6
