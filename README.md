@@ -3,7 +3,7 @@
 ## Introduction
 ---------------
 
-This ansible content will configure an Amazon Linux 2 to be GSA complaint.
+This ansible role will configure an Amazon Linux 2 to be GSA complaint.
 
 This code is based on the GSA [AWS Elastic Kubernetes Service Benchmark](https://docs.google.com/spreadsheets/d/1s9DLJIVlX4eMZXpUs-RLTeCZbdtapfy9rZKb9pvuzHs/edit#gid=1253713100).
 
@@ -53,15 +53,6 @@ Ansible >= 2.7
 ```
 ansible-playbook playbook.yml --connection=local
 ```
-### CircleCI Intergration
-
-This repository has been updated to optionally utilize Continuous Intergration with CircleCI and tests the ansbile tasks against a privledged CentOS-7 Container.  A low number of tasks are incompatiable when ran against a container vs a vm or bare-metal and have ignore_errors turned on.
-
-##### Using CircleCI:
-* Fork this repository or create a branch
-* Sign up for an account and follow the getting started guide at https://circleci.com/docs/2.0/first-steps/#section=getting-started
-* Add the repository to your projects and click start building. https://circleci.com/docs/2.0/project-build/#section=getting-started
-* New Commits will trigger the CircleCI build and run the playbook.yml and the result will pass or fail.
 
 ### License
 
