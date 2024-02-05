@@ -8,6 +8,7 @@
   check_mode: false
   ignore_errors: true
   changed_when: false
+  when: cis_enable_ntp
   tags:
     - level-1
     - "2.2.1.2"
@@ -18,7 +19,7 @@
     path: /etc/sysconfig/ntpd
     regexp: '^OPTIONS=.*$'
     replace: 'OPTIONS="-u ntp:ntp"'
-  when: checkntpconf.rc != 0
+  when: cis_enable_ntp and checkntpconf.rc != 0
   ignore_errors: true
   tags:
     - level-1
@@ -30,6 +31,8 @@
     path: /etc/ntp.conf
     insertbefore: 'restrict default nomodify notrap nopeer noquery'
     line: 'restrict -6 default kod nomodify notrap nopeer noquery'
+  when: cis_enable_ntp
+  ignore_errors: true
   tags:
     - level-1
     - "2.2.1.2"
@@ -40,6 +43,8 @@
     path: /etc/ntp.conf
     insertbefore: 'restrict -6 default kod nomodify notrap nopeer noquery'
     line: 'restrict -4 default kod nomodify notrap nopeer noquery'
+  when: cis_enable_ntp
+  ignore_errors: true
   tags:
     - level-1
     - "2.2.1.2"
