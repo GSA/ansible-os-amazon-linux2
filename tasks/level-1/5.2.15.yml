@@ -3,7 +3,7 @@
 
 # 5.2.15 Ensure SSH access is limited
 
-- include: stat_sshd_config.yml
+- include_tasks: stat_sshd_config.yml
   tags:
     - level-1
     - section-5

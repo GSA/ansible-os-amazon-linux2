@@ -3,7 +3,7 @@
 
 # 5.2.16 - Ensure SSH warning banner is configured
 
-- include: stat_sshd_config.yml
+- include_tasks: stat_sshd_config.yml
   tags:
     - level-1
     - section-5
