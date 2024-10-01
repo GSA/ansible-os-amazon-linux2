@@ -69,3 +69,17 @@
     - section-5
     - "5.2.15"
     - scored
+
+- name: 5.2.15 - Ensure the use of strong key Exchange algorithms
+  lineinfile:
+    regexp: "^KexAlgorithms\\s+"
+    line: "KexAlgorithms {{ cis_sshd_kex }}"
+    dest: "/etc/ssh/sshd_config"
+  create: yes
+  notify:
+    - Restart sshd
+  tags:
+    - level-1
+    - section-5
+    - "5.2.15"
+    - scored

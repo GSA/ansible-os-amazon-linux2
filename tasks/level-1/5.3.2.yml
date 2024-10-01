@@ -16,7 +16,7 @@
           audit
           silent
           deny=5
-          unlock_time=900'
+          unlock_time=1800'
     state: before
   tags:
     - level-1
@@ -36,7 +36,7 @@
     module_arguments: 'authsucc
           audit
           deny=5
-          unlock_time=900'
+          unlock_time=1800'
     state: after
   tags:
     - level-1
@@ -56,7 +56,7 @@
     module_arguments: 'authfail
           audit
           deny=5
-          unlock_time=900'
+          unlock_time=1800'
     state: after
   tags:
     - level-1

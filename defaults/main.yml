@@ -97,20 +97,21 @@ cis_sshd_allow_users: "" # A comma-delimited list of users to allow ssh access t
 cis_sshd_allow_groups: "" # A comma-delimited list of groups ot allow ssh access to
 cis_sshd_deny_users: "" # A comma-delimited list of users to deny ssh access for
 cis_sshd_deny_groups: "" # A comma-delimited list of groups to deny ssh access for
+cis_sshd_kex: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
 
 # 5.2.16
 cis_sshd_banner: "/etc/issue.net"
 
 # 5.3.1
-cis_pwquality_minlen: "14" # Minimum number of characters required for passwords
-cis_pwquality_dcredit: "-1" # At least one digit must be provided
-cis_pwquality_ucredit: "-1" # At least one uppercase character must be provided
-cis_pwquality_ocredit: "-1" # At least one special character must be provided
-cis_pwquality_lcredit: "-1" # At least one lowercase character must be provided
+cis_pwquality_minlen: " 16 " # Minimum number of characters required for passwords
+cis_pwquality_dcredit: " -1 " # At least one digit must be provided
+cis_pwquality_ucredit: " -1 " # At least one uppercase character must be provided
+cis_pwquality_ocredit: " -1 " # At least one special character must be provided
+cis_pwquality_lcredit: " -1 " # At least one lowercase character must be provided
 
 # 5.4.1
 cis_pass_max_days: 90
-cis_pass_min_days: 7
+cis_pass_min_days: 0
 cis_pass_warn_age: 7
 cis_pass_inactive_lock: 30
 
