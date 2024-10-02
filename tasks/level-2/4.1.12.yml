@@ -17,7 +17,7 @@
     insertafter: EOF
     line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged"
   with_items: "{{ privileged_binaries.stdout_lines }}"
-  notify: Generate auditd rules
+  notify: Restart auditd
   tags:
     - level-1
     - section-4
