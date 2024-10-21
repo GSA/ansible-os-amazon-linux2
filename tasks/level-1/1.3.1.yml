@@ -7,6 +7,8 @@
   yum:
     name: aide
     state: present
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   tags:
     - level-1
     - section-1
