@@ -12,14 +12,24 @@
 - name: pip3 install selinux
   command: pip3 install selinux
 
-- name: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (Scored)
-  command: sed -i 's/{{ item.searchstring }}/{{ item.replacestring }}/g' /etc/selinux/config
-  with_items:
-    - { searchstring: "^SELINUX=.*", replacestring: "SELINUX=enforcing" }
-    - { searchstring: "^SELINUXTYPE=.*", replacestring: "SELINUXTYPE=targeted" }
+- name: Ansilbe - Ensure SELinux is not disabled
+  replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUX=.*'
+    replace: '^SELINUX=enforcing"
   tags:
     - level-1
     - section-1
     - "1.1.11"
     - scored
 
+- name: Ansilbe - Ensure SELinux policy is targeted
+  replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUXTYPE=.*'
+    replace: '^SELINUXTYPE=targeted'
+  tags:
+    - level-1
+    - section-1
+    - "1.1.11"
+    - scored
