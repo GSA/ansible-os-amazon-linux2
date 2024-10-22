@@ -12,7 +12,7 @@
 - name: pip3 install selinux
   command: pip3 install selinux
 
-- name: Ansilbe - Ensure SELinux is not disabled
+- name: Ensure SELinux is not disabled
   replace:
     path: /etc/selinux/config
     regexp: '^SELINUX=.*'
@@ -23,7 +23,7 @@
     - "1.1.11"
     - scored
 
-- name: Ansilbe - Ensure SELinux policy is targeted
+- name: Ensure SELinux policy is targeted
   replace:
     path: /etc/selinux/config
     regexp: '^SELINUXTYPE=.*'
