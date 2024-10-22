@@ -4,9 +4,7 @@
 # 3.6.1 Ensure iptables is installed
 
 - name: 3.6.1 - Ensure iptables is installed
-  yum:
-    name: "iptables"
-    state: latest
+  command: yum install "iptables" -y
   tags:
     - level-1
     - section-3
