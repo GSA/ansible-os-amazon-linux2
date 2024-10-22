@@ -4,7 +4,7 @@
 # 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (Scored)
 
 - name: Install the SE Linux requirements - libselinux-python
-  command: yum install libselinux-python3 -y
+  command: yum install libselinux-python -y
 
 - name: Install the SE Linux requirements - policycoreutils-python
   command: yum install policycoreutils-python -y
@@ -13,11 +13,13 @@
   command: pip3 install selinux
 
 - name: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (Scored)
-  ansible.posix.selinux:
-    policy: targeted
-    state: enforcing
+  command: sed -i 's/{{ item.searchstring }}/{{ item.replacestring }}/g' /etc/selinux/config
+  with_items:
+    - { searchstring: "^SELINUX=.*", replacestring: "SELINUX=enforcing" }
+    - { searchstring: "^SELINUXTYPE=.*", replacestring: "SELINUXTYPE=targeted" }
   tags:
-      - level-1
-      - section-1
-      - "1.1.11"
-      - scored
+    - level-1
+    - section-1
+    - "1.1.11"
+    - scored
+
