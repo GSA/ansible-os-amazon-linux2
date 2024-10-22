@@ -13,7 +13,7 @@
   command: pip3 install selinux
 
 - name: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (Scored)
-  selinux:
+  ansible.posix.selinux:
     policy: targeted
     state: enforcing
   tags:
