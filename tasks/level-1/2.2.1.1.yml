@@ -4,13 +4,8 @@
 # 2.2.1.1 Ensure time synchronisation is in use
 
 - name: 2.2.1.1 - Ensure ntp is installed
-  package:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
+  command: yum install ntp -y && yum remove chrony -y && systemctl enable ntpd.service
   when: cis_enable_ntp and not cis_enable_chrony
-  with_items:
-    - { name: "ntp", state: "present" }
-    - { name: "chrony", state: "absent" }
   tags:
     - level-1
     - section-4
@@ -18,13 +13,8 @@
     - not-scored
 
 - name: 2.2.1.1 - Ensure chrony is installed
-  package:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
+  command: yum install chrony -y && yum remove ntp -y && systemctl enable chronyd.service
   when: cis_enable_chrony and not cis_enable_ntp
-  with_items:
-    - { name: "ntp", state: "absent" }
-    - { name: "chrony", state: "present" }
   tags:
     - level-1
     - section-4
