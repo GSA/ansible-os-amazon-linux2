@@ -9,6 +9,9 @@
 - name: Install the SE Linux requirements - policycoreutils-python
   command: yum install policycoreutils-python -y
 
+- name: pip3 install selinux
+  command: pip3 install selinux
+
 - name: 1.6.1.1 Ensure SELinux is not disabled in bootloader configuration (Scored)
   selinux:
     policy: targeted
