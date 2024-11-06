@@ -3,10 +3,8 @@
 
 # 1.6.1.4 Ensure SETroubleshoot is not installed (Scored)
 
-- name: 1.6.1.4 Ensure SETroubleshoot is not installed (Scored)
-  yum:
-    name: mcstrans
-    state: removed
+- name: 1.6.1.5 Ensure SETroubleshoot is not installed (Scored)
+  command: yum remove mcstrans -y
   tags:
       - level-1
       - section-1

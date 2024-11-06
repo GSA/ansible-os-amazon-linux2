@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 ##
 # all_mounts.fact
@@ -72,4 +72,4 @@ for fields in mtab_entries:
 
     mounts.append(mount_info)
 
-print json.dumps(mounts)
+print(json.dumps(mounts))
