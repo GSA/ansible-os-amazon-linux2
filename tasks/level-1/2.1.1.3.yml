@@ -17,3 +17,16 @@
 - fail:
     msg: No server or pool seems to be configured for Chrony. Please fix this as per item 2.1.1.3 of the benchmark, and re-run this play.
   when: line_matched == "0"
+
+- name: 2.1.1.3 remove ntp pool and replace with amazon time server
+  replace:
+    path: /etc/chrony.d/ntp-pool.sources
+    regexp: '^pool [0-2]\.amazon\.pool\.ntp\.org iburst maxsources [1-2]'
+    replace: ''
+  lineinfile:
+    path: /etc/chrony.d/ntp-pool.sources
+    line: 'server 169.254.169.123 prefer iburst minpoll 4 maxpoll 4'
+    insertafter: EOF
+      
+
+
