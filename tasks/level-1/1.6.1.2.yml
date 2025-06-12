@@ -7,7 +7,7 @@
   replace:
     path: /etc/selinux/config
     regexp: '^SELINUX=.*'
-    replace: '^SELINUX=enforcing'
+    replace: 'SELINUX=enforcing'
   tags:
     - level-1
     - section-1

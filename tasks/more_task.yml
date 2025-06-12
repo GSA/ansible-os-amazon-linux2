@@ -1,0 +1,23 @@
+---
+- name: 5.3.21 Ensure SELinux SSH_MaxStartups is configured (Scored)
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: ^(?i)(#|)\s*MaxStartups
+    replace: 'MaxStartups {{ amazon2cis_ssh_maxstartups }}'
+  tags:
+    - level-2
+    - section-5
+    - "5.3.21"
+    - scored
+
+- name: 5.3.22 Ensure SSH MaxSessions is limited (Scored)
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp:  ^(?i)(#|)\s*MaxSessions
+    replace: 'MaxSessions {{ amazon2cis_ssh_maxsessions }}'
+  tags:
+    - level-2
+    - section-5
+    - "5.3.22"
+    - scored
+
