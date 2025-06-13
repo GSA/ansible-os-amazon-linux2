@@ -13,3 +13,6 @@
   when: cis_apply_level_2_profile
 
 - include_tasks: "ntp_pool.yml"
+
+- include_tasks: "more_task.yml"
+  

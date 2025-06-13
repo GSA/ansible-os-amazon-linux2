@@ -1,4 +1,15 @@
 ---
+- name: 5.3.20 Ensure SSH AllowTcpForwarding is disabled (Scored)
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: ^(?i)(#|)\s*AllowTCPForwarding
+    replace: 'AllowTcpForwarding no'
+  tags:
+    - level-2
+    - section-5
+    - "5.3.20"
+    - scored
+
 - name: 5.3.21 Ensure SELinux SSH_MaxStartups is configured (Scored)
   replace:
     path: /etc/ssh/sshd_config
@@ -21,3 +32,68 @@
     - "5.3.22"
     - scored
 
+- name: 4.2.2.3 Ensure journald is configure to write ligfiles to persistent disk (Scored)
+  replace:
+    path: /etc/systemd/journald.conf
+    regexp:  ^(?i)(#|)\s*Storage
+    replace: 'Storage=persistent'
+  tags:
+    - level-2
+    - section-4
+    - "4.2.2.3"
+    - scored
+
+- name: 4.2.2.1 Ensure journald is configured to send logs to rsyslog (Scored)
+  replace:
+    path: /etc/systemd/journald.conf
+    regexp:  ^(?i)(#|)\s*ForwardToSyslog
+    replace: 'ForwardToSyslog=yes'
+  tags:
+    - level-2
+    - section-4
+    - "4.2.2.1"
+    - scored
+
+- name: 4.2.2.2 Ensure journald is configured to compress large log files (Scored)
+  replace:
+    path: /etc/systemd/journald.conf
+    regexp:  ^(?i)(#|)\s*Compress
+    replace: 'Compress=yes'
+  tags:
+    - level-2
+    - section-4
+    - "4.2.2.2"
+    - scored
+
+  name: 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored)
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX="audit=1"'
+    regexp: '^GRUB_CMDLINE_LINUX='
+  tags:
+    - level-2
+    - section-4
+    - "4.1.1.3"
+    - scored
+
+
+- name: 4.1.2.4 Ensure audit_backlog_limit is sufficient (Scored)
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX="audit_backlog_limit=8192"'
+    regexp: '^GRUB_CMDLINE_LINUX='
+  notify:
+    - Update GRUB configuration
+  tags:
+    - level-2
+    - section-4
+    - "4.1.2.4"
+    - scored
+
+- name: Update GRUB configuration
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+  args:
+    executable: /bin/bash
+  become: yes
+  changed_when: false
+  listen: Update GRUB configuration
