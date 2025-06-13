@@ -59,16 +59,12 @@
     - "4.2.2.1"
     - scored
 
-- name: 4.2.2.2 - Ensure journald is configured to compress large log files (Scored)
+- name:   Ensure journald is configured to compress large log files (Scored)
   lineinfile:
     path: /etc/systemd/journald.conf
     line: 'Compress=yes'
     regexp:  ^(?i)(#|)\s*Compress
     
-  tags:
-    - level-2
-    - section-4
-    - scored
 
   name: 4.1.1.3 - Ensure auditing for processes that start prior to auditd is enabled (Scored)
   lineinfile:
@@ -101,4 +97,4 @@
     executable: /bin/bash
   become: yes
   changed_when: false
-  listen: Update GRUB configuration
+  
