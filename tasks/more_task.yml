@@ -81,7 +81,7 @@
 - name: 4.1.2.4 - Ensure audit_backlog_limit is sufficient (Scored)
   lineinfile:
     path: /etc/default/grub
-    line: 'GRUB_CMDLINE_LINUX="audit_backlog_limit=8192"'
+    line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"'
     regexp: '^GRUB_CMDLINE_LINUX='
   notify:
     - Update GRUB configuration
