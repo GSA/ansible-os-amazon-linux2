@@ -35,7 +35,7 @@
     - "5.3.22"
     - scored
 
-- name: 4.2.2.3 - Ensure journald is configure to write ligfiles to persistent disk (Scored)
+- name: 4.2.2.3 - Ensure journald is configure to write logfiles to persistent disk (Scored)
   lineinfile:
     path: /etc/systemd/journald.conf
     line: 'Storage=persistent'
