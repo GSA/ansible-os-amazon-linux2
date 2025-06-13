@@ -16,3 +16,10 @@
     name: auditd
     state: restarted
   ignore_errors: true
+
+- name: Update GRUB configuration
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+  args:
+    executable: /bin/bash
+  become: yes
+  changed_when: false

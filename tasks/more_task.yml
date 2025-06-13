@@ -91,10 +91,5 @@
     - "4.1.2.4"
     - scored
 
-- name: Update GRUB configuration
-  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
-  args:
-    executable: /bin/bash
-  become: yes
-  changed_when: false
+
   
