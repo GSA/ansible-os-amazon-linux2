@@ -108,15 +108,17 @@
     path:  /etc/fstab
     line: 'tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0'
     regexp: '^tmpfs\s+/tmp\s+'
-  shell:  mount -o remount,noexec,nodev,nosuid /tmp 
-  args:
-    executable: /bin/bash
-  become: true
+  
   tags:
     - level-2
     - section-1
     - "1.1.2"
     - scored
+
+- name: Remount /tmp with correct options
+  command: mount -o remount,noexec,nodev,nosuid /tmp
+  become: true
+  
 
 - name: 3.2.1 - Ensure IP forwarding is disabled (Scored)
   shell: |
