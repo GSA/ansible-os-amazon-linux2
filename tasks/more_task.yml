@@ -193,10 +193,6 @@
     - section-4
     - "4.2.1.6"
     - scored
-   
-- name: 3.5.3.3.6 - Ensure ip6tables is enabled and running (Scored)
-  command: systemctl --now start ip6tables
-  become: true
 
 - name: 3.5.1.1 - Ensure firewalld is installed (Scored)
   package:
