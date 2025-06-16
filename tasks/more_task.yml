@@ -195,14 +195,14 @@
     - scored
 
 - name: 3.5.1.1 - Ensure firewalld is installed (Scored)
-  package:
-    name: firewalld
-    state: present
+  command: |
+           if ! rpm -q firewalld; then
+             yum install -y firewalld;
+           fi
   become: true
 
 - name: 3.5.1.4 - Ensure firewalld is enabled and running (Scored)
-  service:
-    name: firewalld
-    state: started
-    enabled: true
+  command: |
+           systemctl enable --now firewalld
+           systemctl start firewalld
   become: true
