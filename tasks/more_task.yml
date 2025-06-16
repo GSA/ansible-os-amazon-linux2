@@ -147,7 +147,10 @@
     - scored 
 
 - name: unload usb-storage module if loaded
-  command: rmmod usb-storage
+  shell: |
+            if lsmod | grep -q usb_storage; then
+              modprobe -r usb_storage;
+            fi
   become: true
 
 - name: 2.1.19 Ensure rsync is not installed or the rsyncd service is masked (Scored)
