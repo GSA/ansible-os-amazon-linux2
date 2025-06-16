@@ -115,11 +115,6 @@
     - "1.1.2"
     - scored
 
-- name: Remount /tmp with correct options
-  command: mount -o remount,noexec,nodev,nosuid /tmp
-  become: true
-  
-
 - name: 3.2.1 - Ensure IP forwarding is disabled (Scored)
   shell: |
        grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf \
