@@ -134,18 +134,76 @@
     - scored 
 
 
-- name: 1.4.1 - Ensure permission on bootloader config are configured (Scored)
-  shell: |
-        chown root:root /boot/grub2/grub.cfg \
-        chmod og-rwx /boot/grub2/grub.cfg 
-  args :
-    executable: /bin/bash
+- name:  1.1.24 Disable USB Storage (Scored)
+  lineinfile:
+    regexp:  "^usb-storage\\s+"
+    line: "install usb-storage /bin/true"
+    dest: /etc/modprobe.d/CIS.conf
+  
+  tags:
+    - level-1
+    - section-1
+    - "1.1.24"
+    - scored 
+
+- name: unload usb-storage module if loaded
+  command: rmmod usb-storage
   become: true
-   
+
+- name: 2.1.19 Ensure rsync is not installed or the rsyncd service is masked (Scored)
+  command: systemctl --now mask rsyncd
+  become: true
+
+  tags:
+    - level-1
+    - section-2
+    - "2.1.19"
+    - scored
+
+- name: 2.1.18 Ensure rpcbind is not installed or the rsyncd service is masked (Scored)
+  command: |
+           systemctl --now mask rpcbind
+           systemctl --now mask rpcbind.socket
+  become: true
+
+  tags:
+    - level-1
+    - section-2
+    - "2.1.18"
+    - scored
+
+- name:  Ensure remote rsyslog messsage are only accepted on designated log hosts (Scored)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: '$InputTCPServerRun 514'
+    regexp: '^#?\s*\$InputTCPServerRun'    
+
+- name: 4.2.1.6 - Ensure remote rsyslog messsage are only accepted on designated log hosts (Scored)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: '$ModLoad imtcp'
+    regexp: '^#?\s*\$ModLoad imtcp'
+  notify:
+    - Restart rsyslog
   tags:
     - level-2
-    - section-1
-    - "1.4.1"
-    - scored 
-  
+    - section-4
+    - "4.2.1.6"
+    - scored
+   
+- name: 3.5.3.3.6 - Ensure ip6tables is enabled and running (Scored)
+  command: systemctl --now start ip6tables
+  become: true
 
+- name: 3.5.1.1 - Ensure firewalld is installed (Scored)
+  package:
+    name: firewalld
+    state: present
+  become: true
+
+- name: 3.5.1.4 - Ensure firewalld is enabled and running (Scored)
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+  become: true
