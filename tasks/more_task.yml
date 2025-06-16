@@ -61,12 +61,11 @@
 
 - name:   Ensure journald is configured to compress large log files (Scored)
   lineinfile:
-    path: /etc/systemd/journald.conf
-    line: 'Compress=yes'
-    regexp:  ^(?i)(#|)\s*Compress
+    regexp:  "^Compress\\s+"
+    line: "Compress=yes"
+    dest: /etc/systemd/journald.conf
     
-
-  name: 4.1.1.3 - Ensure auditing for processes that start prior to auditd is enabled (Scored)
+- name: 4.1.1.3 - Ensure auditing for processes that start prior to auditd is enabled (Scored)
   lineinfile:
     path: /etc/default/grub
     line: 'GRUB_CMDLINE_LINUX="audit=1"'
@@ -92,4 +91,66 @@
     - scored
 
 
+- name: 4.2.4 - Ensure permission on all logfiles are configured (Scored)
+  shell: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
+  args :
+    executable: /bin/bash
+  become: true
+   
+  tags:
+    - level-2
+    - section-4
+    - "4.2.4"
+    - scored 
+
+- name: 1.1.2 - Ensure /tmp is configured (Scored)
+  lineinfile:
+    path:  /etc/fstab
+    line: 'tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0'
+    regexp: '^tmpfs\s+/tmp\s+'
+  shell:  mount -o remount,noexec,nodev,nosuid /tmp 
+  args:
+    executable: /bin/bash
+  become: true
+  tags:
+    - level-2
+    - section-1
+    - "1.1.2"
+    - scored
+
+- name: 3.2.1 - Ensure IP forwarding is disabled (Scored)
+  shell: |
+       grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf \
+       /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" \
+       $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1 \ 
+       grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf \
+       /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" \
+       $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1
+  args :
+    executable: /bin/bash
+  become: true
+   
+  tags:
+    - level-2
+    - section-3
+    - "3.2.1"
+    - scored 
+
+
+- name: 1.4.1 - Ensure permission on bootloader config are configured (Scored)
+  shell: |
+        chown root:root /boot/grub2/grub.cfg \
+        test -f /boot/grub2/user.cfg && chown root:root /boot/grub2/user.cfg \
+        chmod og-rwx /boot/grub2/grub.cfg \
+        test -f /boot/grub2/user.cfg && chmod og-rwx /boot/grub2/user.cfg
+  args :
+    executable: /bin/bash
+  become: true
+   
+  tags:
+    - level-2
+    - section-1
+    - "1.4.1"
+    - scored 
   
+
