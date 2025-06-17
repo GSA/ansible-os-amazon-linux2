@@ -196,9 +196,7 @@
 
 - name: 2.1.17 Ensure nfs-utils is not installed or the nfs-server service is masked (Scored)
   command: |
-           if systemctl is-active --quiet nfs-server; then
-             systemctl --now mask nfs-server
-           fi
+           systemctl --now mask nfs-server
   become: true  
   tags:
     - level-1
