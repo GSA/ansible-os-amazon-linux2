@@ -1,0 +1,207 @@
+---
+- name: 5.3.20 - Ensure SSH AllowTcpForwarding is disabled (Scored)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'AllowTcpForwarding no'
+    regexp: ^(?i)(#|)\s*AllowTCPForwarding
+    
+  tags:
+    - level-2
+    - section-5
+    - "5.3.20"
+    - scored
+
+- name: 5.3.21 - Ensure SELinux SSH_MaxStartups is configured (Scored)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'MaxStartups {{ amazon2cis_ssh_maxstartups }}'
+    regexp: ^(?i)(#|)\s*MaxStartups
+    
+  tags:
+    - level-2
+    - section-5
+    - "5.3.21"
+    - scored
+
+- name: 5.3.22 - Ensure SSH MaxSessions is limited (Scored)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'MaxSessions {{ amazon2cis_ssh_maxsessions }}'
+    regexp:  ^(?i)(#|)\s*MaxSessions
+    
+  tags:
+    - level-2
+    - section-5
+    - "5.3.22"
+    - scored
+
+- name: 4.2.2.3 - Ensure journald is configure to write logfiles to persistent disk (Scored)
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    line: 'Storage=persistent'
+    regexp:  ^(?i)(#|)\s*Storage
+    
+  tags:
+    - level-2
+    - section-4
+    - "4.2.2.3"
+    - scored
+
+- name: 4.2.2.1 - Ensure journald is configured to send logs to rsyslog (Scored)
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    line: 'ForwardToSyslog=yes'
+    regexp:  ^(?i)(#|)\s*ForwardToSyslog
+    
+  tags:
+    - level-2
+    - section-4
+    - "4.2.2.1"
+    - scored
+
+- name:   Ensure journald is configured to compress large log files (Scored)
+  lineinfile:
+    regexp:  "^Compress\\s+"
+    line: "Compress=yes"
+    dest: /etc/systemd/journald.conf
+    
+- name: 4.1.1.3 - Ensure auditing for processes that start prior to auditd is enabled (Scored)
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX="audit=1"'
+    regexp: '^GRUB_CMDLINE_LINUX='
+  tags:
+    - level-2
+    - section-4
+    - "4.1.1.3"
+    - scored
+
+
+- name: 4.1.2.4 - Ensure audit_backlog_limit is sufficient (Scored)
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"'
+    regexp: '^GRUB_CMDLINE_LINUX='
+  notify:
+    - Update GRUB configuration
+  tags:
+    - level-2
+    - section-4
+    - "4.1.2.4"
+    - scored
+
+
+- name: 4.2.4 - Ensure permission on all logfiles are configured (Scored)
+  shell: find /var/log -type f -exec chmod g-wx,o-rwx "{}" +
+  args :
+    executable: /bin/bash
+  become: true
+   
+  tags:
+    - level-2
+    - section-4
+    - "4.2.4"
+    - scored 
+
+- name: 1.1.2 - Ensure /tmp is configured (Scored)
+  lineinfile:
+    path:  /etc/fstab
+    line: 'tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0'
+    regexp: '^tmpfs*'
+  
+  tags:
+    - level-2
+    - section-1
+    - "1.1.2"
+    - scored
+
+- name: 3.2.1 - Ensure IP forwarding is disabled (Scored)
+  shell: |
+       grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf \
+       /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" \
+       $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1 \ 
+       grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf \
+       /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" \
+       $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1
+  args :
+    executable: /bin/bash
+  become: true
+   
+  tags:
+    - level-2
+    - section-3
+    - "3.2.1"
+    - scored 
+
+
+- name:  1.1.24 Disable USB Storage (Scored)
+  lineinfile:
+    regexp:  "^usb-storage\\s+"
+    line: "install usb-storage /bin/true"
+    dest: /etc/modprobe.d/CIS.conf
+  
+  tags:
+    - level-1
+    - section-1
+    - "1.1.24"
+    - scored 
+
+- name: unload usb-storage module if loaded
+  shell: |
+            if lsmod | grep -q usb_storage; then
+              modprobe -r usb_storage;
+            fi
+  become: true
+
+- name: 2.1.19 Ensure rsync is not installed or the rsyncd service is masked (Scored)
+  command: systemctl --now mask rsyncd
+  become: true
+
+  tags:
+    - level-1
+    - section-2
+    - "2.1.19"
+    - scored
+
+- name: 2.1.18 Ensure rpcbind is not installed or the rsyncd service is masked (Scored)
+  command: |
+           systemctl --now mask rpcbind
+           systemctl --now mask rpcbind.socket
+  become: true
+
+  tags:
+    - level-1
+    - section-2
+    - "2.1.18"
+    - scored
+
+- name:  Ensure remote rsyslog messsage are only accepted on designated log hosts (Scored)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: '$InputTCPServerRun 514'
+    regexp: '^#?\s*\$InputTCPServerRun'    
+
+- name: 4.2.1.6 - Ensure remote rsyslog messsage are only accepted on designated log hosts (Scored)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: '$ModLoad imtcp'
+    regexp: '^#?\s*\$ModLoad imtcp'
+  notify:
+    - Restart rsyslog
+  tags:
+    - level-2
+    - section-4
+    - "4.2.1.6"
+    - scored
+
+- name: 2.1.17 Ensure nfs-utils is not installed or the nfs-server service is masked (Scored)
+  command: |
+           systemctl --now mask nfs-server
+  become: true  
+  tags:
+    - level-1
+    - section-2
+    - "2.1.17"
+    - scored
+
+
